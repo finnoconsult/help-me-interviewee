@@ -4,12 +4,15 @@
   "license": "MIT",
   "scripts": {
     "start": "nx serve",
+    "dev": "nx serve service",
     "build": "nx build",
     "test": "nx test"
   },
   "private": true,
   "dependencies": {
+    "axios": "^0.24.0",
     "express": "4.17.1",
+    "sqlite3": "^5.0.2",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
@@ -21,9 +24,11 @@
     "@nrwl/node": "13.1.4",
     "@nrwl/tao": "13.1.4",
     "@nrwl/workspace": "13.1.4",
+    "@types/axios": "^0.14.0",
     "@types/express": "4.17.0",
     "@types/jest": "27.0.2",
     "@types/node": "14.14.33",
+    "@types/sqlite3": "^3.1.7",
     "@typescript-eslint/eslint-plugin": "~4.33.0",
     "@typescript-eslint/parser": "~4.33.0",
     "eslint": "7.32.0",
