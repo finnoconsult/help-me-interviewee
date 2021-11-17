@@ -11,9 +11,19 @@ app.get('/starships', (req, res) => {
   db.each(
     'SELECT * FROM starship;',
     (err, row) => ships.push(row),
-    () => {
-      res.send({ ships });
-    }
+    () => res.send({ ships })
+  );
+});
+
+app.get('/starships/:id', (req, res) => {
+  let ship = null;
+  const stmt = db.prepare('SELECT * FROM starship WHERE id=?');
+  stmt.each(
+    req.params.id,
+    (err, row) => {
+      ship = row;
+    },
+    () => stmt.finalize(() => res.send({ ship }))
   );
 });
 
