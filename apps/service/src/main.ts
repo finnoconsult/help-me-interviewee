@@ -1,10 +1,13 @@
 import * as express from 'express';
+import * as bodyParser from 'body-parser';
 import axios from 'axios';
 import * as sqlite3 from 'sqlite3';
 
 const app = express();
 const db = new sqlite3.Database(':memory:');
 const port = process.env.port || 3000;
+
+app.use(bodyParser.json());
 
 app.get('/starships', (req, res) => {
   const ships = [];
@@ -17,7 +20,7 @@ app.get('/starships', (req, res) => {
 
 app.get('/starships/:id', (req, res) => {
   let ship = null;
-  const stmt = db.prepare('SELECT * FROM starship WHERE id=?');
+  const stmt = db.prepare('SELECT * FROM starship WHERE id=?;');
   stmt.each(
     req.params.id,
     (err, row) => {
@@ -27,8 +30,24 @@ app.get('/starships/:id', (req, res) => {
   );
 });
 
+app.post('/starships/race', (req, res) => {
+  const { idA, idB } = req.body;
+  const ids = [idA, idB];
+
+  let ships = [];
+
+  db.serialize(() => {
+    const stmt = db.prepare('SELECT * FROM starship WHERE id=? OR id=?');
+    stmt.all(ids, (error, rows) => {
+      ships = rows;
+    });
+    stmt.finalize(() => res.send({ ships }));
+  });
+});
+
 app.use('*', (req, res) => {
-  res.send({ error: 404 });
+  res.status(404);
+  res.send({ error: 'not found' });
 });
 
 const server = app.listen(port, async () => {
