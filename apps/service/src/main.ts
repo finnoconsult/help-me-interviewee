@@ -35,7 +35,12 @@ app.post('/starships/race', (req, res) => {
     stmt.all(ids, (error, rows) => {
       ships = rows;
     });
-    stmt.finalize(() => res.send({ ships }));
+    stmt.finalize(() => {
+      const winner = ships.sort(
+        (a, b) => b.max_atmosphering_speed - a.max_atmosphering_speed
+      )[0];
+      res.send({ winner });
+    });
   });
 });
 
