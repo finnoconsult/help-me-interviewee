@@ -1,3 +1,3 @@
 {
-  "eslint.workingDirectories":["apps/servie"]
+  "eslint.workingDirectories":["apps/service"]
 }
