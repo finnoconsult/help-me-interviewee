@@ -18,17 +18,50 @@ const Layout = styled.div`
   height: 80%;
 `;
 
-const ShipList = styled.ul``;
+const ShipList = styled.ul`
+  background-color: lightgray;
+  border-radius: 14px;
+  padding: 14px;
+  margin: 14px;
 
-const Race = styled.ul``;
+  list-style-type: none;
 
-const Racer = styled.ul``;
+  li {
+    margin: 10px 0;
+    cursor: pointer;
+  }
+`;
 
-const Button = styled.button``;
+const Race = styled.div``;
 
-const SubmitButton = styled.button``;
+const Racer = styled.div`
+  background-color: lightgray;
+  border-radius: 14px;
+  padding: 14px;
+  margin: 14px;
+`;
 
-const Result = styled.p``;
+const Button = styled.button`
+  background-color: red;
+  color: white;
+  box-shadow: none;
+  border: none;
+  cursor: pointer;
+`;
+
+const SubmitButton = styled.button`
+  margin: 14px;
+  padding: 14px;
+  background-color: blue;
+  color: white;
+  box-shadow: none;
+  border: none;
+  cursor: pointer;
+`;
+
+const Result = styled.p`
+  text-align: center;
+`;
 
 export function App() {
   const [areShipsLoading, setAreShipsLoading] = React.useState(false);
