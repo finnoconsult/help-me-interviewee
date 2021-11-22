@@ -2,15 +2,19 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import axios from 'axios';
 import * as sqlite3 from 'sqlite3';
+import * as cors from 'cors';
 
 const app = express();
 const db = new sqlite3.Database(':memory:');
 const port = process.env.port || 3000;
 
+app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/starships', (req, res) => {
-  db.all('SELECT * FROM starship;', (err, rows) => res.send({ ships: rows }));
+  db.all('SELECT * FROM starship;', (err, rows) =>
+    res.send({ ships: rows.map((row) => ({ id: row.id, name: row.name })) })
+  );
 });
 
 app.get('/starships/:id', (req, res) => {

@@ -11,35 +11,107 @@ const Page = styled.div`
 
 const Content = styled.div``;
 
+const Layout = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex: 0, 0, 50%;
+  height: 80%;
+`;
+
+const ShipList = styled.ul``;
+
+const Race = styled.ul``;
+
+const Racer = styled.ul``;
+
+const SubmitButton = styled.button``;
+
+const Result = styled.p``;
+
 export function App() {
+  const [areShipsLoading, setAreShipsLoading] = React.useState(false);
   const [ships, setShips] = React.useState<any>([]);
+
+  const [isRacerALoading, setIsRacerALoading] = React.useState(false);
+  const [isRacerBLoading, setIsRacerBLoading] = React.useState(false);
+  const [racerA, setRacerA] = React.useState<any>(null);
+  const [racerB, setRacerB] = React.useState<any>(null);
+
+  const [isWinnerLoading, setIsWinnerLoading] = React.useState(false);
+  const [winner, setWinner] = React.useState<any>(null);
 
   React.useEffect(() => {
     (async () => {
-      // TODO: restore after api ssl cert is fixed
-      // const result = await axios.get('http://localhost:3000/starships');
-      const result = {
-        data: [
-          {
-            id: 1,
-            name: 'ship1',
-            speed: 10,
-          },
-          {
-            id: 2,
-            name: 'ship2',
-            speed: 11,
-          },
-        ],
-      };
-      setShips(result.data);
+      setAreShipsLoading(true);
+      const result = await axios.get('http://localhost:3000/starships');
+      setShips(result.data.ships);
+      setAreShipsLoading(false);
     })();
-  });
+  }, []);
 
   return (
     <Page>
       <Content>
         <h1>Starship racer</h1>
+        <Layout>
+          <ShipList>
+            {areShipsLoading ? 'Loading...' : null}
+            {!areShipsLoading && ships && ships.length > 0
+              ? ships.map((ship: any) => (
+                  <li
+                    onClick={async () => {
+                      if (!racerA) {
+                        setIsRacerALoading(true);
+                        const racer = await axios.get(
+                          `http://localhost:3000/starships/${ship.id}`
+                        );
+                        setIsRacerALoading(false);
+                        setRacerA(racer.data.ship);
+                      } else if (!racerB) {
+                        setIsRacerBLoading(true);
+                        const racer = await axios.get(
+                          `http://localhost:3000/starships/${ship.id}`
+                        );
+                        setIsRacerBLoading(false);
+                        setRacerB(racer.data.ship);
+                      }
+                    }}
+                  >
+                    {ship.name}
+                  </li>
+                ))
+              : null}
+          </ShipList>
+          <Race>
+            {!isRacerALoading && racerA ? <Racer>{racerA.name}</Racer> : null}
+            {!isRacerBLoading && racerB ? <Racer>{racerB.name}</Racer> : null}
+            {!isRacerALoading && !isRacerBLoading && racerA && racerB && (
+              <>
+                <SubmitButton
+                  disabled={isWinnerLoading}
+                  onClick={async () => {
+                    const result = await axios.post(
+                      `http://localhost:3000/starships/race`,
+                      {
+                        idA: racerA.id,
+                        idB: racerB.id,
+                      },
+                      {
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                      }
+                    );
+                    setWinner(result.data.winner);
+                  }}
+                >
+                  Race!
+                </SubmitButton>
+                {winner && <Result>{`The winner is: ${winner.name}`}</Result>}
+              </>
+            )}
+          </Race>
+        </Layout>
       </Content>
     </Page>
   );
