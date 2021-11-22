@@ -83,8 +83,20 @@ export function App() {
               : null}
           </ShipList>
           <Race>
-            {!isRacerALoading && racerA ? <Racer>{racerA.name}</Racer> : null}
-            {!isRacerBLoading && racerB ? <Racer>{racerB.name}</Racer> : null}
+            {!isRacerALoading && racerA ? (
+              <Racer>
+                <h2>{racerA.name}</h2>
+                <p>{`speed: ${racerA.max_atmosphering_speed}`}</p>
+                <p>{`price: ${racerA.cost_in_credits}`}</p>
+              </Racer>
+            ) : null}
+            {!isRacerBLoading && racerB ? (
+              <Racer>
+                <h2>{racerB.name}</h2>
+                <p>{`speed: ${racerB.max_atmosphering_speed}`}</p>
+                <p>{`price: ${racerB.cost_in_credits}`}</p>
+              </Racer>
+            ) : null}
             {!isRacerALoading && !isRacerBLoading && racerA && racerB && (
               <>
                 <SubmitButton
