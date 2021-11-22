@@ -24,6 +24,8 @@ const Race = styled.ul``;
 
 const Racer = styled.ul``;
 
+const Button = styled.button``;
+
 const SubmitButton = styled.button``;
 
 const Result = styled.p``;
@@ -86,6 +88,14 @@ export function App() {
             {!isRacerALoading && racerA ? (
               <Racer>
                 <h2>{racerA.name}</h2>
+                <Button
+                  onClick={() => {
+                    setRacerA(null);
+                    setWinner(null);
+                  }}
+                >
+                  Remove
+                </Button>
                 <p>{`speed: ${racerA.max_atmosphering_speed}`}</p>
                 <p>{`price: ${racerA.cost_in_credits}`}</p>
               </Racer>
@@ -93,6 +103,14 @@ export function App() {
             {!isRacerBLoading && racerB ? (
               <Racer>
                 <h2>{racerB.name}</h2>
+                <Button
+                  onClick={() => {
+                    setWinner(null);
+                    setRacerB(null);
+                  }}
+                >
+                  Remove
+                </Button>
                 <p>{`speed: ${racerB.max_atmosphering_speed}`}</p>
                 <p>{`price: ${racerB.cost_in_credits}`}</p>
               </Racer>
