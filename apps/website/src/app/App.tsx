@@ -90,6 +90,7 @@ export function App() {
                 <SubmitButton
                   disabled={isWinnerLoading}
                   onClick={async () => {
+                    setIsWinnerLoading(true);
                     const result = await axios.post(
                       `http://localhost:3000/starships/race`,
                       {
@@ -102,6 +103,7 @@ export function App() {
                         },
                       }
                     );
+                    setIsWinnerLoading(false);
                     setWinner(result.data.winner);
                   }}
                 >
